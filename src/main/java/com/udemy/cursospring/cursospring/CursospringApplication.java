@@ -1,6 +1,7 @@
 package com.udemy.cursospring.cursospring;
 
 import com.udemy.cursospring.cursospring.model.*;
+import com.udemy.cursospring.cursospring.model.enums.EstadoPagamento;
 import com.udemy.cursospring.cursospring.model.enums.TipoCliente;
 import com.udemy.cursospring.cursospring.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 @SpringBootApplication
@@ -32,6 +34,12 @@ public class CursospringApplication implements CommandLineRunner {
 
 	@Autowired
 	EnderecoRepository enderecoRepository;
+
+	@Autowired
+	PagamentoRepository pagamentoRepository;
+
+	@Autowired
+	PedidoRepository pedidoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursospringApplication.class, args);
@@ -78,5 +86,20 @@ public class CursospringApplication implements CommandLineRunner {
 
         clienteRepository.saveAll(Arrays.asList(cli1));
         enderecoRepository.saveAll(Arrays.asList(e1,e2));
+
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+        Pedido ped1 = new Pedido(null, dateFormat.parse("27/05/2017 08:25"), cli1, e1);
+		Pedido ped2 = new Pedido(null, dateFormat.parse("08/07/2018 09:25"), cli1, e2);
+
+		Pagamento pg1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pg1);
+		Pagamento pg2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, dateFormat.parse("20/10/2017 00:00"), null);
+		ped2.setPagamento(pg2);
+
+		cli1.getPedidos().addAll(Arrays.asList(ped1,ped2));
+
+		pedidoRepository.saveAll(Arrays.asList(ped1,ped2));
+		pagamentoRepository.saveAll(Arrays.asList(pg1,pg2));
 	}
 }
