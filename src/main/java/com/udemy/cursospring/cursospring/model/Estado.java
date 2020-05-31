@@ -1,6 +1,7 @@
 package com.udemy.cursospring.cursospring.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,7 +16,7 @@ public class Estado implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nome;
-    @JsonBackReference
+    @JsonIgnore
     @OneToMany(mappedBy = "estado")
     private List<Cidade> cidades = new ArrayList<>();
 

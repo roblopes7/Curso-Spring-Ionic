@@ -1,6 +1,7 @@
 package com.udemy.cursospring.cursospring.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.udemy.cursospring.cursospring.model.enums.EstadoPagamento;
 
 import javax.persistence.*;
@@ -15,7 +16,7 @@ public abstract class Pagamento implements Serializable {
     private Integer id;
     private Integer estadoPagamento;
 
-    @JsonBackReference
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "pedido_id")
     @MapsId
