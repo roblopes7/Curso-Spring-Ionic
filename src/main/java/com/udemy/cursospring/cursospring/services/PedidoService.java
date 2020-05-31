@@ -1,7 +1,7 @@
 package com.udemy.cursospring.cursospring.services;
 
-import com.udemy.cursospring.cursospring.model.Categoria;
-import com.udemy.cursospring.cursospring.repositories.CategoriaRepository;
+import com.udemy.cursospring.cursospring.model.Pedido;
+import com.udemy.cursospring.cursospring.repositories.PedidoRepository;
 import com.udemy.cursospring.cursospring.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,15 +9,15 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class CategoriaService {
+public class PedidoService {
 
     @Autowired
-    CategoriaRepository repository;
+    PedidoRepository repository;
 
-    public Categoria buscar(Integer id){
-        Optional<Categoria> obj = repository.findById(id);
+    public Pedido buscar(Integer id){
+        Optional<Pedido> obj = repository.findById(id);
         return obj.orElseThrow(()->
                 new ObjectNotFoundException("Objeto não encontrado! Id: " + id + " Tipo: "
-                        + Categoria.class.getName()));
+                        + Pedido.class.getName()));
     }
 }
