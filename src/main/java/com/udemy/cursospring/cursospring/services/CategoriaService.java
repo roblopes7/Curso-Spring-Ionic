@@ -14,7 +14,7 @@ public class CategoriaService {
     @Autowired
     CategoriaRepository repository;
 
-    public Categoria buscar(Integer id){
+    public Categoria find(Integer id){
         Optional<Categoria> obj = repository.findById(id);
         return obj.orElseThrow(()->
                 new ObjectNotFoundException("Objeto não encontrado! Id: " + id + " Tipo: "
@@ -22,6 +22,11 @@ public class CategoriaService {
     }
 
     public Categoria insert(Categoria obj) {
+        return repository.saveAndFlush(obj);
+    }
+
+    public Categoria update(Categoria obj) {
+        find(obj.getId());
         return repository.saveAndFlush(obj);
     }
 }

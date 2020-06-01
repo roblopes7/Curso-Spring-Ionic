@@ -3,6 +3,7 @@ package com.udemy.cursospring.cursospring.resources;
 import com.udemy.cursospring.cursospring.model.Categoria;
 import com.udemy.cursospring.cursospring.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -19,8 +20,8 @@ public class CategoriaResource {
     private CategoriaService service;
 
     @RequestMapping(value = "/{id}",method = RequestMethod.GET)
-    public ResponseEntity<?> find(@PathVariable Integer id) {
-        Categoria obj = service.buscar(id);
+    public ResponseEntity<Categoria> find(@PathVariable Integer id) {
+        Categoria obj = service.find(id);
         return ResponseEntity.ok().body(obj);
     }
 
@@ -31,4 +32,12 @@ public class CategoriaResource {
                 .buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Void> update(@RequestBody Categoria obj, @PathVariable Integer id) {
+        obj.setId(id);
+        obj = service.update(obj);
+        return ResponseEntity.noContent().build();
+    }
+
 }
