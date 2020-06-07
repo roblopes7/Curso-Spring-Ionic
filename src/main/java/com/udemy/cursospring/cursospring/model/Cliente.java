@@ -3,6 +3,7 @@ package com.udemy.cursospring.cursospring.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.udemy.cursospring.cursospring.dto.ClienteDTO;
 import com.udemy.cursospring.cursospring.model.enums.TipoCliente;
 
 import javax.persistence.*;
@@ -38,6 +39,13 @@ public class Cliente implements Serializable {
 
     public Cliente() {
     }
+
+    public Cliente(ClienteDTO dto) {
+        this.id = dto.getId();
+        this.nome = dto.getNome();
+        this.email = dto.getEmail();
+    }
+
 
     public Integer getId() {
         return id;
