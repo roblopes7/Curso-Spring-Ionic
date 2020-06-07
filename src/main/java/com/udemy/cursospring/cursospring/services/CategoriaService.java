@@ -1,5 +1,6 @@
 package com.udemy.cursospring.cursospring.services;
 
+import com.udemy.cursospring.cursospring.dto.CategoriaDTO;
 import com.udemy.cursospring.cursospring.model.Categoria;
 import com.udemy.cursospring.cursospring.repositories.CategoriaRepository;
 import com.udemy.cursospring.cursospring.services.exceptions.DataIntegrityException;
@@ -52,5 +53,9 @@ public class CategoriaService {
     public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
         PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
         return repository.findAll(pageRequest);
+    }
+
+    public Categoria fromDTO(CategoriaDTO dto){
+        return new Categoria(dto.getId(), dto.getNome());
     }
 }
