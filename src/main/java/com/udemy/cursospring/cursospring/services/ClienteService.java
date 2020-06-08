@@ -2,9 +2,14 @@ package com.udemy.cursospring.cursospring.services;
 
 import com.udemy.cursospring.cursospring.dto.ClienteDTO;
 import com.udemy.cursospring.cursospring.dto.ClienteDTO;
+import com.udemy.cursospring.cursospring.dto.ClienteNewDTO;
+import com.udemy.cursospring.cursospring.model.Cidade;
 import com.udemy.cursospring.cursospring.model.Cliente;
 import com.udemy.cursospring.cursospring.model.Cliente;
+import com.udemy.cursospring.cursospring.model.Endereco;
+import com.udemy.cursospring.cursospring.model.enums.TipoCliente;
 import com.udemy.cursospring.cursospring.repositories.ClienteRepository;
+import com.udemy.cursospring.cursospring.repositories.EnderecoRepository;
 import com.udemy.cursospring.cursospring.services.exceptions.DataIntegrityException;
 import com.udemy.cursospring.cursospring.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +29,9 @@ public class ClienteService {
     @Autowired
     ClienteRepository repository;
 
+    @Autowired
+    EnderecoRepository enderecoRepository;
+
     public Cliente find(Integer id){
         Optional<Cliente> obj = repository.findById(id);
         return obj.orElseThrow(()->
@@ -31,7 +40,10 @@ public class ClienteService {
     }
 
     public Cliente insert(Cliente obj) {
-        return repository.saveAndFlush(obj);
+        obj.setId(null);
+        obj = repository.saveAndFlush(obj);
+        enderecoRepository.saveAll(obj.getEnderecos());
+        return obj;
     }
 
     public Cliente update(Cliente obj) {
@@ -65,5 +77,20 @@ public class ClienteService {
 
     public Cliente fromDTO(ClienteDTO dto){
         return new Cliente(dto);
+    }
+
+    public Cliente fromDTO(ClienteNewDTO dto) {
+        Cliente c = new Cliente(null, dto.getNome(), dto.getEmail(), dto.getCpfOuCnpj(), TipoCliente.toEnum(dto.getTipoCliente()));
+        Cidade cid = new Cidade(dto.getCidadeId(), null, null);
+        Endereco e = new Endereco(null, dto.getLogradouro(), dto.getNumero(), dto.getComplemento(), dto.getBairro(), dto.getCep(), c, cid);
+        c.getEnderecos().add(e);
+        c.getTelefones().add(dto.getTelefone1());
+        if (dto.getTelefone2() != null) {
+            c.getTelefones().add(dto.getTelefone2());
+        }
+        if (dto.getTelefone3() != null) {
+            c.getTelefones().add(dto.getTelefone3());
+        }
+        return c;
     }
 }

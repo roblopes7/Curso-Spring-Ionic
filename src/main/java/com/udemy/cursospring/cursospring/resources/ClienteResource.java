@@ -1,6 +1,7 @@
 package com.udemy.cursospring.cursospring.resources;
 
 import com.udemy.cursospring.cursospring.dto.ClienteDTO;
+import com.udemy.cursospring.cursospring.dto.ClienteNewDTO;
 import com.udemy.cursospring.cursospring.model.Cliente;
 import com.udemy.cursospring.cursospring.model.Cliente;
 import com.udemy.cursospring.cursospring.services.ClienteService;
@@ -29,7 +30,7 @@ public class ClienteResource {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Void> insert(@Valid @RequestBody ClienteDTO dto) {
+    public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO dto) {
         Cliente obj = service.fromDTO(dto);
         obj = service.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
