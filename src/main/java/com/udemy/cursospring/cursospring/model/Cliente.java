@@ -5,8 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.udemy.cursospring.cursospring.dto.ClienteDTO;
 import com.udemy.cursospring.cursospring.model.enums.TipoCliente;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.*;
 
@@ -16,8 +19,13 @@ public class Cliente implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @NotEmpty(message = "Preenchimento Obrigatório")
+    @Length(min = 5, max = 120, message = "Tamanho deve ser entre 5 e 120 caracteres")
     private String nome;
+    @NotEmpty(message = "Preenchimento Obrigatório")
+    @Email(message = "Email inválido")
     private String email;
+    @NotEmpty(message = "Preenchimento Obrigatório")
     private String cpfOuCnpj;
     private Integer tipoCliente;
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
